@@ -10,9 +10,9 @@ import (
 
 //Config 配置
 type Config struct {
-	secret string   //签名
-	event  []string //事件集合
-	action func()   //回调函数
+	Secret string   //签名
+	Event  []string //事件集合
+	Action func()   //回调函数
 }
 
 //Hook 执行hook
@@ -37,7 +37,7 @@ func Hook(w http.ResponseWriter, r *http.Request, conf Config) {
 		return
 	}
 	log.Info("event = ", event)
-	if !checkEvent(conf.event, event[0]) {
+	if !checkEvent(conf.Event, event[0]) {
 		log.Info("not support event")
 		return
 	}
@@ -51,11 +51,11 @@ func Hook(w http.ResponseWriter, r *http.Request, conf Config) {
 	token = strings.TrimPrefix(token, "sha1=")
 	log.Info("token= ", token)
 	//验证签名
-	str := hmacsha1("abcdefgh", buf)
+	str := hmacsha1(conf.Secret, buf)
 	log.Info("str = ", str)
 	if strings.EqualFold(str, token) {
 		log.Info("签名验证成功")
-		conf.action()
+		conf.Action()
 	} else {
 		log.Errorln("签名验证失败")
 	}
