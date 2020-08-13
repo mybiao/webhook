@@ -21,8 +21,9 @@ func Hook(w http.ResponseWriter, r *http.Request, conf Config) {
 		w.Write([]byte("not support method!"))
 		return
 	}
+	header := r.Header
 	//首先验证签名是否正确
-	sign := r.Header["X-Hub-Signature"]
+	sign := header["X-Hub-Signature"]
 	if len(sign) == 0 {
 		log.Info("not contains signature")
 		return
@@ -31,7 +32,7 @@ func Hook(w http.ResponseWriter, r *http.Request, conf Config) {
 	log.WithFields(log.Fields{
 		"X-Hub-Signature": token,
 	}).Info("token = ")
-	event := r.Header["X-GitHub-Event"]
+	event := header["X-GitHub-Event"]
 	if len(event) == 0 {
 		log.Info("not found event")
 		return
