@@ -1,6 +1,7 @@
 package webhook
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -32,7 +33,8 @@ func Hook(w http.ResponseWriter, r *http.Request, conf Config) {
 	log.WithFields(log.Fields{
 		"X-Hub-Signature": token,
 	}).Info("token = ")
-	event := header["X-GitHub-Event"]
+	event := r.Header["X-Github-Event"]
+	fmt.Println(event)
 	if len(event) == 0 {
 		log.Info("not found event")
 		return
