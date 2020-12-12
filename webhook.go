@@ -1,6 +1,7 @@
 package webhook
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -62,6 +63,20 @@ func Hook(w http.ResponseWriter, r *http.Request, conf Config) {
 	} else {
 		log.Errorln("签名验证失败")
 	}
+	res := struct {
+		code int
+		msg  string
+		body interface{}
+	}{
+		code: 200,
+		msg:  "success",
+		body: nil,
+	}
+	jsonRes, err := json.Marshal(res)
+	if err != nil {
+		log.Errorln("json marsha1 error,", err.Error())
+	}
+	w.Write(jsonRes)
 }
 
 //检查值是否包含
