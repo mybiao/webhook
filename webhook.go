@@ -59,7 +59,7 @@ func Hook(w http.ResponseWriter, r *http.Request, conf Config) {
 	log.Info("str = ", str)
 	if strings.EqualFold(str, token) {
 		log.Info("签名验证成功")
-		conf.Action()
+		go conf.Action()
 	} else {
 		log.Errorln("签名验证失败")
 	}
