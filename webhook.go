@@ -63,16 +63,9 @@ func Hook(w http.ResponseWriter, r *http.Request, conf Config) {
 	} else {
 		log.Errorln("签名验证失败")
 	}
-	res := struct {
-		code int
-		msg  string
-		body interface{}
-	}{
-		code: 200,
-		msg:  "success",
-		body: nil,
-	}
-	jsonRes, err := json.Marshal(res)
+
+	resultMap := map[string]interface{}{"code": 200, "msg": "success", "data": nil}
+	jsonRes, err := json.Marshal(resultMap)
 	if err != nil {
 		log.Errorln("json marsha1 error,", err.Error())
 	}
